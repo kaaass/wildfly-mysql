@@ -1,23 +1,26 @@
 # WildFly 8 on Docker with Centos 7 and OpenJDK 1.7
-FROM jboss/wildfly:latest
+FROM jboss/wildfly:13.0.0.Final
 
 # Maintainer
 MAINTAINER Christian Metz <christian@metzweb.net>
 
 # Appserver
-ENV WILDFLY_USER admin
-ENV WILDFLY_PASS adminPassword
+ARG WILDFLY_USER=admin
+ARG WILDFLY_PASS=adminPassword
 
 # Database
-ENV DB_NAME sample
-ENV DB_USER mysql
-ENV DB_PASS mysql
-ENV DB_URI db:3306
+ARG MYSQL_VERSION=8.0.23
 
-ENV MYSQL_VERSION 6.0.6
+RUN echo "=> Downloading MySQL driver" && \
+      curl --location --output /tmp/mysql-connector-java-${MYSQL_VERSION}.jar --url http://search.maven.org/remotecontent?filepath=mysql/mysql-connector-java/${MYSQL_VERSION}/mysql-connector-java-${MYSQL_VERSION}.jar
+
+ARG DB_NAME=sample
+ARG DB_USER=mysql
+ARG DB_PASS=mysql
+ARG DB_URI=db:3306
+
 ENV JBOSS_CLI /opt/jboss/wildfly/bin/jboss-cli.sh
 ENV DEPLOYMENT_DIR /opt/jboss/wildfly/standalone/deployments/
-#ENV JAVA_OPTS
 
 # Setting up WildFly Admin Console
 RUN echo "=> Adding WildFly administrator"
@@ -28,8 +31,6 @@ RUN echo "=> Starting WildFly server" && \
       bash -c '$JBOSS_HOME/bin/standalone.sh &' && \
     echo "=> Waiting for the server to boot" && \
       bash -c 'until `$JBOSS_CLI -c ":read-attribute(name=server-state)" 2> /dev/null | grep -q running`; do echo `$JBOSS_CLI -c ":read-attribute(name=server-state)" 2> /dev/null`; sleep 1; done' && \
-    echo "=> Downloading MySQL driver" && \
-      curl --location --output /tmp/mysql-connector-java-${MYSQL_VERSION}.jar --url http://search.maven.org/remotecontent?filepath=mysql/mysql-connector-java/${MYSQL_VERSION}/mysql-connector-java-${MYSQL_VERSION}.jar && \
     echo "=> Adding MySQL module" && \
       $JBOSS_CLI --connect --command="module add --name=com.mysql --resources=/tmp/mysql-connector-java-${MYSQL_VERSION}.jar --dependencies=javax.api,javax.transaction.api" && \
     echo "=> Adding MySQL driver" && \
@@ -53,9 +54,9 @@ RUN echo "=> Starting WildFly server" && \
       rm -f /tmp/*.jar
 
 # Expose http and admin ports
-EXPOSE 8080 9990
+EXPOSE 8080 9990 8787
 
 #echo "=> Restarting WildFly"
 # Set the default command to run on boot
 # This will boot WildFly in the standalone mode and bind to all interfaces
-CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0"]
+CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0", "--debug"]

@@ -3,34 +3,40 @@ version: "2"
 services:
   app:
     container_name: "app"
-    image: "metz/wildfly"
-    environment:
-      - WILDFLY_USER=admin
-      - WILDFLY_PASS=adminPassword
-      - DB_NAME=sample
-      - DB_USER=mysql
-      - DB_PASS=mysql
-      - DB_URI=db:3306
+    build:
+      context: .
+      network: host
+      args:
+        WILDFLY_USER: admin
+        WILDFLY_PASS: admin
+        DB_NAME: ${MYSQL_DATABASE}
+        DB_USER: ${MYSQL_USER}
+        DB_PASS: ${MYSQL_PASSWORD}
+        DB_URI: db:3306
+        MYSQL_VERSION: ${MYSQL_VERSION}
     depends_on:
       - db
+    volumes:
+      - ./workdir/deployment/:/opt/jboss/wildfly/standalone/deployments/
     ports:
       - "8080:8080" # application
       - "9990:9990" # admin console
+      - "8787:8787" # java debug
 
   db:
     container_name: "db"
-    image: "mysql:latest"
+    image: "mysql:${MYSQL_VERSION}"
     environment:
-      - MYSQL_DATABASE=sample
-      - MYSQL_USER=mysql
-      - MYSQL_PASSWORD=mysql
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_ROOT_PASSWORD=supersecret
     volumes:
       - ./workdir/db/init/:/docker-entrypoint-initdb.d/ # init database
       - ./workdir/db/data/:/var/lib/mysql/              # data storage
     ports:
-      - "3306:3306"
+      - "13306:3306"
 
 networks:
-    default:
-        driver: bridge
+  default:
+    driver: bridge
