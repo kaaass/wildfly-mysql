@@ -1,6 +1,6 @@
 # Wildfly MySQL DevStack
 
-[![Docker Automated build](https://img.shields.io/docker/automated/kaaass/wildfly-mysql.svg)](https://hub.docker.com/r/metz/wildfly-mysql/)
+[![Docker Automated build](https://img.shields.io/docker/automated/kaaass/wildfly-mysql.svg)](https://hub.docker.com/r/kaaass/wildfly-mysql/)
 
 ## About
 
@@ -31,7 +31,7 @@ Clone the repository and checkout the branch if you need.
 ```sh
 $ git clone https://github.com/kaaass/wildfly-mysql.git
 $ cd wildfly-mysql
-# (optional) checkout a specific branch
+# (optional but recommend) checkout a specific branch
 $ git checkout java-11-wildfly-23.0.0.Final-mysql-8.0
 ```
 
@@ -70,6 +70,7 @@ Available Tags:
 - latest
 - java-11-wildfly-23.0.0.Final-mysql-8.0
 - java-8-wildfly-13.0.0.Final-mysql-5.7
+- java-7-jboss-as-7.1.1.Final-mysql-5.7
 
 ## Configuration
 
@@ -129,5 +130,7 @@ Please submit issues through the *issue tracker* on GitHub.
 ## Credits
 
 https://github.com/christianmetz/wildfly-mysql
+
+https://github.com/pascalgrimaud/docker-jboss-as for JBoss AS
 
 Released under the [MIT License](LICENSE).
