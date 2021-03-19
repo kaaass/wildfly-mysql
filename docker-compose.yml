@@ -3,17 +3,19 @@ version: "2"
 services:
   app:
     container_name: "app"
+    image: wildfly-mysql:wildfly-${WILDFLY_VERSION}-mysql-${MYSQL_VERSION}
     build:
       context: .
       network: host
       args:
+        WILDFLY_VER: ${WILDFLY_VERSION}
         WILDFLY_USER: admin
         WILDFLY_PASS: admin
         DB_NAME: ${MYSQL_DATABASE}
         DB_USER: ${MYSQL_USER}
         DB_PASS: ${MYSQL_PASSWORD}
         DB_URI: db:3306
-        MYSQL_VERSION: ${MYSQL_VERSION}
+        MYSQL_CONNECTOR_VERSION: ${MYSQL_CONNECTOR_VERSION}
     depends_on:
       - db
     volumes:

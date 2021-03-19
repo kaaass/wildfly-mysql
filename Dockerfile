@@ -1,18 +1,16 @@
-# WildFly 8 on Docker with Centos 7 and OpenJDK 1.7
-FROM jboss/wildfly:13.0.0.Final
+ARG WILDFLY_VER=13.0.0.Final
 
-# Maintainer
-MAINTAINER Christian Metz <christian@metzweb.net>
+FROM jboss/wildfly:${WILDFLY_VER}
 
 # Appserver
 ARG WILDFLY_USER=admin
 ARG WILDFLY_PASS=adminPassword
 
 # Database
-ARG MYSQL_VERSION=8.0.23
+ARG MYSQL_CONNECTOR_VERSION=8.0.23
 
 RUN echo "=> Downloading MySQL driver" && \
-      curl --location --output /tmp/mysql-connector-java-${MYSQL_VERSION}.jar --url http://search.maven.org/remotecontent?filepath=mysql/mysql-connector-java/${MYSQL_VERSION}/mysql-connector-java-${MYSQL_VERSION}.jar
+      curl --location --output /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.jar --url http://search.maven.org/remotecontent?filepath=mysql/mysql-connector-java/${MYSQL_CONNECTOR_VERSION}/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.jar
 
 ARG DB_NAME=sample
 ARG DB_USER=mysql
@@ -32,9 +30,8 @@ RUN echo "=> Starting WildFly server" && \
     echo "=> Waiting for the server to boot" && \
       bash -c 'until `$JBOSS_CLI -c ":read-attribute(name=server-state)" 2> /dev/null | grep -q running`; do echo `$JBOSS_CLI -c ":read-attribute(name=server-state)" 2> /dev/null`; sleep 1; done' && \
     echo "=> Adding MySQL module" && \
-      $JBOSS_CLI --connect --command="module add --name=com.mysql --resources=/tmp/mysql-connector-java-${MYSQL_VERSION}.jar --dependencies=javax.api,javax.transaction.api" && \
+      $JBOSS_CLI --connect --command="module add --name=com.mysql --resources=/tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.jar --dependencies=javax.api,javax.transaction.api" && \
     echo "=> Adding MySQL driver" && \
-                                     #/subsystem=datasources/jdbc-driver=mysql:add(driver-name=mysql,driver-module-name=com.mysql.driver,driver-class-name=com.mysql.jdbc.Driver)
       $JBOSS_CLI --connect --command="/subsystem=datasources/jdbc-driver=mysql:add(driver-name=mysql,driver-module-name=com.mysql,driver-xa-datasource-class-name=com.mysql.jdbc.jdbc2.optional.MysqlXADataSource)" && \
     echo "=> Creating a new datasource" && \
       $JBOSS_CLI --connect --command="data-source add \
