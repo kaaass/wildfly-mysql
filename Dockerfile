@@ -14,6 +14,7 @@ ENV DB_URI localhost:3306
 
 # Download MySQL driver
 ARG MYSQL_CONNECTOR_VERSION=8.0.23
+ENV MYSQL_CONNECTOR_VERSION ${MYSQL_CONNECTOR_VERSION}
 
 RUN echo "=> Downloading MySQL driver" && \
       curl --location \
