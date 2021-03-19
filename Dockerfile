@@ -23,6 +23,9 @@ ENV DB_URI db:3306
 ENV JBOSS_CLI /opt/jboss/wildfly/bin/jboss-cli.sh
 ENV DEPLOYMENT_DIR /opt/jboss/wildfly/standalone/deployments/
 
+# Fix debug problem
+RUN sed -i "s/JAVA_OPTS=\"\$JAVA_OPTS -agentlib:jdwp=transport=dt_socket,address=\$DEBUG_PORT,server=y,suspend=n\"/JAVA_OPTS=\"\$JAVA_OPTS -agentlib:jdwp=transport=dt_socket,address=*:\$DEBUG_PORT,server=y,suspend=n\"/" $JBOSS_HOME/bin/standalone.sh
+
 # Expose http and admin ports and debug port
 EXPOSE 8080 9990 8787
 
