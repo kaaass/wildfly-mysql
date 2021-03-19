@@ -4,8 +4,8 @@ if [[ ! -f $JBOSS_HOME/.setup ]]; then
     # Set environment variables
     DATASOURCE=java:jboss/datasources/${DB_NAME}DS
 
-    # Setup WildFly admin user
-    echo "=> Add WildFly administrator"
+    # Setup JBoss admin user
+    echo "=> Add JBoss administrator"
     $JBOSS_HOME/bin/add-user.sh --silent=true $WILDFLY_USER $WILDFLY_PASS
 
     # Configure datasource
