@@ -1,11 +1,11 @@
-ARG WILDFLY_VER=23.0.0.Final
+ARG WILDFLY_VER=13.0.0.Final
 
 FROM jboss/wildfly:${WILDFLY_VER}
 
 # Enviorment variables
 ENV WILDFLY_DEBUG false
 ENV WILDFLY_USER admin
-ENV WILDFLY_PASS adminPassword
+ENV WILDFLY_PASS pass
 
 ENV DB_NAME sample
 ENV DB_USER mysql
@@ -13,8 +13,7 @@ ENV DB_PASS mysql
 ENV DB_URI localhost:3306
 
 # Download MySQL driver
-ARG MYSQL_CONNECTOR_VERSION=8.0.23
-ENV MYSQL_CONNECTOR_VERSION ${MYSQL_CONNECTOR_VERSION}
+ARG MYSQL_CONNECTOR_VERSION=5.1.49
 
 RUN echo "=> Downloading MySQL driver" && \
       curl --location \
