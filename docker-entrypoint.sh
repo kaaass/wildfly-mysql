@@ -48,6 +48,13 @@ rm -rf $JBOSS_HOME/standalone/configuration/standalone_xml_history/* \
        /tmp/*.jar
 unset WILDFLY_USER WILDFLY_PASS DB_NAME DB_USER DB_PASS DATASOURCE
 
+extra_args=
+
+if [[ "$WILDFLY_DEBUG" = "true" ]]; then
+    echo "=> Enable debug mode"
+    extra_args="$extra_args --debug"
+fi
+    
 echo "=> Start WildFly"
 # Boot WildFly in standalone mode and bind it to all interfaces (enable admin console and debug)
-$JBOSS_HOME/bin/standalone.sh -b 0.0.0.0 -bmanagement 0.0.0.0 --debug
+$JBOSS_HOME/bin/standalone.sh -b 0.0.0.0 -bmanagement 0.0.0.0 $extra_args
