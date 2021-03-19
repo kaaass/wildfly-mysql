@@ -3,7 +3,15 @@ version: "2"
 services:
   app:
     container_name: "app"
+    # Retrive pre-built image from DockerHub
     image: kaaass/wildfly-mysql:java-8-wildfly-13.0.0.Final-mysql-5.7
+    # Or build locally by removing comments below
+    #build:
+      #context: .
+      #network: host
+      #args:
+        #WILDFLY_VER: ${WILDFLY_VERSION}
+        #MYSQL_CONNECTOR_VERSION: ${MYSQL_CONNECTOR_VERSION}
     environment:
       - WILDFLY_DEBUG=${WILDFLY_DEBUG}
       - WILDFLY_USER=${WILDFLY_ADMIN_USER}
@@ -30,8 +38,8 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     volumes:
-      - ./workdir/db/init/:/docker-entrypoint-initdb.d/ # init database
-      - ./workdir/db/data/:/var/lib/mysql/              # data storage
+      - ${DATABASE_INIT_PATH}:/docker-entrypoint-initdb.d/ # init database
+      - ${DATABASE_DATA_PATH}:/var/lib/mysql/              # data storage
     ports:
       - "13306:3306"
 
