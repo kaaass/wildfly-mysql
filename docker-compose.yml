@@ -3,13 +3,7 @@ version: "2"
 services:
   app:
     container_name: "app"
-    image: wildfly-mysql:jboss-as-${WILDFLY_VERSION}-mysql-${MYSQL_VERSION}
-    build:
-      context: .
-      network: host
-      args:
-        WILDFLY_VER: ${WILDFLY_VERSION}
-        MYSQL_CONNECTOR_VERSION: ${MYSQL_CONNECTOR_VERSION}
+    image: kaaass/wildfly-mysql:java-7-jboss-as-7.1.1.Final-mysql-5.7
     environment:
       - WILDFLY_DEBUG=${WILDFLY_DEBUG}
       - WILDFLY_USER=${WILDFLY_ADMIN_USER}
