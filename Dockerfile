@@ -1,34 +1,37 @@
-ARG WILDFLY_VER=23.0.0.Final
+ARG WILDFLY_VER=7.1.1
 
-FROM jboss/wildfly:${WILDFLY_VER}
+FROM pascalgrimaud/jboss-as:${WILDFLY_VER}
+
+RUN apt-get -y update && apt-get -y install curl
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Enviorment variables
 ENV WILDFLY_DEBUG false
 ENV WILDFLY_USER admin
-ENV WILDFLY_PASS adminPassword
+ENV WILDFLY_PASS pass
 
 ENV DB_NAME sample
 ENV DB_USER mysql
 ENV DB_PASS mysql
 ENV DB_URI localhost:3306
 
-# Download MySQL driver
-ARG MYSQL_CONNECTOR_VERSION=8.0.23
-ENV MYSQL_CONNECTOR_VERSION ${MYSQL_CONNECTOR_VERSION}
+ENV JBOSS_HOME /opt/jboss-as
+ENV DEPLOYMENT_DIR ${JBOSS_HOME}/standalone/deployments/
+RUN mv /opt/jboss-as-7.1.1.Final ${JBOSS_HOME}
 
+# Download MySQL driver
+ARG MYSQL_CONNECTOR_VERSION=5.1.26
+
+ADD module.xml ${JBOSS_HOME}/modules/com/mysql/main/
 RUN echo "=> Downloading MySQL driver" && \
       curl --location \
-           --output /tmp/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.jar \
-           --url http://search.maven.org/remotecontent?filepath=mysql/mysql-connector-java/${MYSQL_CONNECTOR_VERSION}/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.jar
+           --output ${JBOSS_HOME}/modules/com/mysql/main/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.jar \
+           --url http://search.maven.org/remotecontent?filepath=mysql/mysql-connector-java/${MYSQL_CONNECTOR_VERSION}/mysql-connector-java-${MYSQL_CONNECTOR_VERSION}.jar && \
+      sed -i "s/\${MYSQL_CONNECTOR_VERSION}/${MYSQL_CONNECTOR_VERSION}/" ${JBOSS_HOME}/modules/com/mysql/main/module.xml
 
-ENV JBOSS_CLI /opt/jboss/wildfly/bin/jboss-cli.sh
-ENV DEPLOYMENT_DIR /opt/jboss/wildfly/standalone/deployments/
-
-# Fix debug problem
-RUN sed -i "s/JAVA_OPTS=\"\$JAVA_OPTS -agentlib:jdwp=transport=dt_socket,address=\$DEBUG_PORT,server=y,suspend=n\"/JAVA_OPTS=\"\$JAVA_OPTS -agentlib:jdwp=transport=dt_socket,address=*:\$DEBUG_PORT,server=y,suspend=n\"/" $JBOSS_HOME/bin/standalone.sh
 
 # Expose http and admin ports and debug port
 EXPOSE 8080 9990 8787
 
-ADD docker-entrypoint.sh /opt/jboss/wildfly/customization/
-CMD ["/opt/jboss/wildfly/customization/docker-entrypoint.sh"]
+ADD docker-entrypoint.sh ${JBOSS_HOME}/customization/
+CMD ["/opt/jboss-as/customization/docker-entrypoint.sh"]
