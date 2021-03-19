@@ -20,7 +20,7 @@ module add \
   --dependencies=javax.api,javax.transaction.api
 
 # Configure driver
-/subsystem=datasources/jdbc-driver=mysql:add(driver-name="mysql",driver-module-name="com.mysql",driver-class-name="com.mysql.cj.jdbc.Driver")
+/subsystem=datasources/jdbc-driver=mysql:add(driver-name=mysql,driver-module-name=com.mysql,driver-xa-datasource-class-name=com.mysql.jdbc.jdbc2.optional.MysqlXADataSource)
 
 # Add new datasource
 data-source add \
