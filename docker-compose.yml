@@ -30,8 +30,8 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     volumes:
-      - ./workdir/db/init/:/docker-entrypoint-initdb.d/ # init database
-      - ./workdir/db/data/:/var/lib/mysql/              # data storage
+      - ${DATABASE_INIT_PATH}:/docker-entrypoint-initdb.d/ # init database
+      - ${DATABASE_DATA_PATH}:/var/lib/mysql/              # data storage
     ports:
       - "13306:3306"
 
