@@ -43,6 +43,10 @@ services:
     ports:
       - "13306:3306"
 
+volumes:
+  db-data:
+    driver: local
+      
 networks:
   default:
     driver: bridge
