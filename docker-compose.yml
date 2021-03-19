@@ -9,17 +9,18 @@ services:
       network: host
       args:
         WILDFLY_VER: ${WILDFLY_VERSION}
-        WILDFLY_USER: admin
-        WILDFLY_PASS: admin
-        DB_NAME: ${MYSQL_DATABASE}
-        DB_USER: ${MYSQL_USER}
-        DB_PASS: ${MYSQL_PASSWORD}
-        DB_URI: db:3306
         MYSQL_CONNECTOR_VERSION: ${MYSQL_CONNECTOR_VERSION}
+    environment:
+      - WILDFLY_USER=${WILDFLY_ADMIN_USER}
+      - WILDFLY_PASS=${WILDFLY_ADMIN_PASS}
+      - DB_NAME=${MYSQL_DATABASE}
+      - DB_USER=${MYSQL_USER}
+      - DB_PASS=${MYSQL_PASSWORD}
+      - DB_URI=db:3306
     depends_on:
       - db
     volumes:
-      - ./workdir/deployment/:/opt/jboss/wildfly/standalone/deployments/
+      - ${DEPLOYMENT_PATH}:/opt/jboss/wildfly/standalone/deployments/:rw
     ports:
       - "8080:8080" # application
       - "9990:9990" # admin console
@@ -32,7 +33,7 @@ services:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-      - MYSQL_ROOT_PASSWORD=supersecret
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     volumes:
       - ./workdir/db/init/:/docker-entrypoint-initdb.d/ # init database
       - ./workdir/db/data/:/var/lib/mysql/              # data storage
