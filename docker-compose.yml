@@ -2,7 +2,6 @@ version: "2"
 
 services:
   app:
-    container_name: "app"
     image: wildfly-mysql:jboss-as-${WILDFLY_VERSION}-mysql-${MYSQL_VERSION}
     build:
       context: .
@@ -29,7 +28,6 @@ services:
       - "8787:8787" # java debug
 
   db:
-    container_name: "db"
     image: "mysql:${MYSQL_VERSION}"
     environment:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
