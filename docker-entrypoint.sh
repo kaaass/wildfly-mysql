@@ -4,10 +4,12 @@ set -e
 if [[ ! -f $JBOSS_HOME/.setup ]]; then
 
     # run init script
-    for f in ${JBOSS_HOME}/customization/init.d/*; do
-        echo "=> Run custom init script '$f'"
-        bash "$f" 
-    done
+    if (ls ${JBOSS_HOME}/customization/init.d/* 1> /dev/null 2>&1); then
+        for f in ${JBOSS_HOME}/customization/init.d/*; do
+            echo "=> Run custom init script '$f'"
+            bash "$f" 
+        done
+    fi
 
     # change listening port
     sed -i -r 's/jboss.bind.address.management:127.0.0.1/jboss.bind.address.management:0.0.0.0/' \
