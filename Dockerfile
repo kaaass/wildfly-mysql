@@ -32,10 +32,6 @@ ENV LAUNCH_JBOSS_IN_BACKGROUND true
 
 USER jboss
 
-# Change listening address
-RUN sed -i -r 's/jboss.bind.address.management:127.0.0.1/jboss.bind.address.management:0.0.0.0/' \
-    ${JBOSS_HOME}/standalone/configuration/standalone.xml
-
 ###################
 # Configure MySQL #
 ###################
@@ -69,5 +65,6 @@ USER jboss
 # Expose http and admin ports and debug port
 EXPOSE 8080 9990 8787
 
+RUN mkdir -p ${JBOSS_HOME}/customization/init.d
 ADD docker-entrypoint.sh ${JBOSS_HOME}/customization/
 CMD ["/opt/jboss/jbossas/customization/docker-entrypoint.sh"]

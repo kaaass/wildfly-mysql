@@ -23,7 +23,8 @@ services:
     depends_on:
       - db
     volumes:
-      - ${DEPLOYMENT_PATH}:/opt/jboss-as/standalone/deployments/:rw
+      - ${DEPLOYMENT_PATH}:/opt/jboss/jbossas/standalone/deployments/:rw
+      - ${INIT_PATH}:/opt/jboss/jbossas/customization/init.d
     ports:
       - "8080:8080" # application
       - "9990:9990" # admin console
