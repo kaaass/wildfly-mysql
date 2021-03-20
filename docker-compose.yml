@@ -2,7 +2,6 @@ version: "2"
 
 services:
   app:
-    container_name: "app"
     # Retrive pre-built image from DockerHub
     image: kaaass/wildfly-mysql:java-7-jboss-as-7.1.1.Final-mysql-5.7
     # Or build locally by removing comments below
@@ -31,7 +30,6 @@ services:
       - "8787:8787" # java debug
 
   db:
-    container_name: "db"
     image: "mysql:${MYSQL_VERSION}"
     environment:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
