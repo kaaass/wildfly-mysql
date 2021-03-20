@@ -71,6 +71,7 @@ Available Tags:
 - java-11-wildfly-23.0.0.Final-mysql-8.0
 - java-8-wildfly-13.0.0.Final-mysql-5.7
 - java-7-jboss-as-7.1.1.Final-mysql-5.7
+- software-and-middleware-course
 
 ## Configuration
 
@@ -99,6 +100,11 @@ Arguments:
 - WILDFLY_VER=23.0.0.Final
 - MYSQL_CONNECTOR_VERSION=8.0.23
 
+Paths: 
+
+- Deployment path: `/opt/jboss/wildfly/standalone/deployments/` (for jboss-as, `/opt/jboss/jbossas/standalone/deployments/`)
+- Init script path: `/opt/jboss/wildfly/customization/init.d` (for jboss-as, `/opt/jboss/jbossas/customization/init.d`), every file in folder will be executed by `bash $f`.
+
 #### Database
 
 [Official MySQL image documentation](https://store.docker.com/images/mysql)
@@ -119,6 +125,7 @@ Debugging your project with this repository in IntelliJ IDEA is quite simple. It
 4. Add following `Environment variables`:
    1. `DEPLOYMENT_PATH`: path your `.war` file located. For Gradle project, use `{path to your project}/build/libs/`
    2. (optional, recommend) `WILDFLY_DEBUG`: set `true` to enable remote debugging
+   3. (optional, recommend) `COMPOSE_PROJECT_NAME`: indicates the project name
 5. In `Before launch`, add task building `.war` file.
 
 Hot reloading is enabled in default (since it only changes the `.war` file and the container is up-to-date). If you need a cold boot, stop the `app` container first.
