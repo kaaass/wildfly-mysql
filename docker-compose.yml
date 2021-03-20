@@ -22,6 +22,7 @@ services:
       - db
     volumes:
       - ${DEPLOYMENT_PATH}:/opt/jboss/wildfly/standalone/deployments/:rw
+      - ${INIT_PATH}:/opt/jboss/wildfly/customization/init.d
     ports:
       - "8080:8080" # application
       - "9990:9990" # admin console

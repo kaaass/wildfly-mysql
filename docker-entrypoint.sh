@@ -1,6 +1,16 @@
 #!/bin/bash
+set -e
 
 if [[ ! -f $JBOSS_HOME/.setup ]]; then
+
+    # run init script
+    if (ls ${JBOSS_HOME}/customization/init.d/* 1> /dev/null 2>&1); then
+        for f in ${JBOSS_HOME}/customization/init.d/*; do
+            echo "=> Run custom init script '$f'"
+            bash "$f" 
+        done
+    fi
+
     # Set environment variables
     DATASOURCE=java:/jdbc/datasources/${DB_NAME}DS
 
