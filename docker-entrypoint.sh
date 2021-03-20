@@ -1,6 +1,18 @@
 #!/bin/bash
+set -e
 
 if [[ ! -f $JBOSS_HOME/.setup ]]; then
+
+    # run init script
+    for f in ${JBOSS_HOME}/customization/init.d/*; do
+        echo "=> Run custom init script '$f'"
+        bash "$f" 
+    done
+
+    # change listening port
+    sed -i -r 's/jboss.bind.address.management:127.0.0.1/jboss.bind.address.management:0.0.0.0/' \
+        ${JBOSS_HOME}/standalone/configuration/standalone.xml
+
     # Set environment variables
     DATASOURCE=java:jboss/datasources/${DB_NAME}DS
 
