@@ -27,5 +27,6 @@ ENV DEPLOYMENT_DIR /opt/jboss/wildfly/standalone/deployments/
 # Expose http and admin ports and debug port
 EXPOSE 8080 9990 8787
 
+RUN mkdir -p ${JBOSS_HOME}/customization/init.d
 ADD docker-entrypoint.sh /opt/jboss/wildfly/customization/
 CMD ["/opt/jboss/wildfly/customization/docker-entrypoint.sh"]
