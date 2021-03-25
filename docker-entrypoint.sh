@@ -54,7 +54,7 @@ fi
 
 if [[ "$WILDFLY_DEBUG" = "true" ]]; then
     echo "=> Enable debug mode"
-    sed -i "s/#JAVA_OPTS=\"$JAVA_OPTS -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n\"/JAVA_OPTS=\"$JAVA_OPTS -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n\"/" $JBOSS_HOME/bin/standalone.conf
+    sed -i "s/#JAVA_OPTS=\"\$JAVA_OPTS -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n\"/JAVA_OPTS=\"\$JAVA_OPTS -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n\"/" $JBOSS_HOME/bin/standalone.conf
 fi
     
 echo "=> Start JBoss AS"
