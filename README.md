@@ -103,6 +103,9 @@ Arguments:
 Paths: 
 
 - Deployment path: `/opt/jboss/wildfly/standalone/deployments/` (for jboss-as, `/opt/jboss/jbossas/standalone/deployments/`)
+
+  **Notice:** Auto deployment for exploded (unzipped war) archive are not enabled in default. It is recommend to use a single war file.
+
 - Init script path: `/opt/jboss/wildfly/customization/init.d` (for jboss-as, `/opt/jboss/jbossas/customization/init.d`), every file in folder will be executed by `bash $f`.
 
 #### Database
