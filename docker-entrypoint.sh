@@ -39,6 +39,7 @@ if [[ ! -f $JBOSS_HOME/.setup ]]; then
     " $JBOSS_HOME/standalone/configuration/standalone.xml
     sed -i "/<\\/drivers>/i\\
                         <driver name=\"mysql\" module=\"com.mysql\">\\
+                            <driver-class>com.mysql.jdbc.Driver</driver-class>\\
                             <xa-datasource-class>com.mysql.jdbc.jdbc2.optional.MysqlXADataSource</xa-datasource-class>\\
                         </driver>
     " $JBOSS_HOME/standalone/configuration/standalone.xml
